@@ -139,7 +139,7 @@ namespace Statistics
                     point.Label = hourData[i].ToString(); // 设置数据标签
                     point.Color = Color.Green;
                 }
-            }
+                }
 
             // 设置 Y 轴标签格式为整数
             hourChart.ChartAreas[0].AxisY.LabelStyle.Format = "N0";

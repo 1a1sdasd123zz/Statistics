@@ -32,16 +32,25 @@
         {
             this.hourChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.totalLabel = new System.Windows.Forms.Label();
-            this.clearButton = new System.Windows.Forms.Button();
+<<<<<<<<< Temporary merge branch 1
+=========
+            this.clearButton = new System.Windows.Forms.Button(); // 初始化清零按钮
+>>>>>>>>> Temporary merge branch 2
             ((System.ComponentModel.ISupportInitialize)(this.hourChart)).BeginInit();
             this.SuspendLayout();
             // 
             // hourChart
             // 
             this.hourChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hourChart.Location = new System.Drawing.Point(0, 81);
+<<<<<<<<< Temporary merge branch 1
+            this.hourChart.Location = new System.Drawing.Point(0, 30);
             this.hourChart.Name = "hourChart";
-            this.hourChart.Size = new System.Drawing.Size(600, 269);
+            this.hourChart.Size = new System.Drawing.Size(600, 320);
+=========
+            this.hourChart.Location = new System.Drawing.Point(0, 70);
+            this.hourChart.Name = "hourChart";
+            this.hourChart.Size = new System.Drawing.Size(600, 280);
+>>>>>>>>> Temporary merge branch 2
             this.hourChart.TabIndex = 0;
             // 
             // totalLabel
@@ -55,9 +64,12 @@
             this.totalLabel.Size = new System.Drawing.Size(101, 41);
             this.totalLabel.TabIndex = 1;
             this.totalLabel.Text = "总量: 0";
-            // 
-            // clearButton
-            // 
+
+<<<<<<<<< Temporary merge branch 1
+            // StatisticsControl 设置
+            this.Controls.Add(this.hourChart);
+=========
+            // clearButton 设置
             this.clearButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.clearButton.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.clearButton.Location = new System.Drawing.Point(0, 41);
