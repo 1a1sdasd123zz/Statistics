@@ -24,6 +24,7 @@ namespace Statistics
         {
             InitializeComponent();
             ResetData();
+            InitializeChart();
         }
 
 
@@ -142,7 +143,7 @@ namespace Statistics
 
             // 设置 Y 轴标签格式为整数
             hourChart.ChartAreas[0].AxisY.LabelStyle.Format = "N0";
-        }
+            }
 
         private void ClearButton_Click(object sender, EventArgs e)
         {
