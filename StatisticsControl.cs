@@ -25,8 +25,10 @@ namespace Statistics
         public StatisticsControl()
         {
             InitializeComponent();
-            ResetData();
+            LoadData(); // 加载本地数据
             InitializeChart();
+            UpdateChart(); // 更新图表以显示加载的数据
+            UpdateTotalLabel(); // 更新总量标签以显示加载的数据
         }
 
         private void InitializeChart()
@@ -55,31 +57,31 @@ namespace Statistics
         public void SetShiftType(ShiftType shiftType)
         {
             currentShift = shiftType;
-            ResetData();
+            LoadData(); // 切换班次时重新加载数据
             UpdateChart();
+            UpdateTotalLabel();
         }
 
         private void ResetData()
         {
-            LoadData();
-            if (hourData == null)
+            // 仅在需要清零数据时调用此方法
+            hourData = new List<int>();
+            if (currentShift == ShiftType.DayShift)
             {
-                hourData = new List<int>();
-                if (currentShift == ShiftType.DayShift)
-                {
-                    // 白班: 8点到20点
-                    for (int i = 0; i < 12; i++)
-                        hourData.Add(0);
-                }
-                else
-                {
-                    // 夜班: 20点到8点
-                    for (int i = 0; i < 12; i++)
-                        hourData.Add(0);
-                }
-                totalCount = 0;
+                // 白班: 8点到20点
+                for (int i = 0; i < 12; i++)
+                    hourData.Add(0);
             }
+            else
+            {
+                // 夜班: 20点到8点
+                for (int i = 0; i < 12; i++)
+                    hourData.Add(0);
+            }
+            totalCount = 0;
             UpdateTotalLabel();
+            UpdateChart();
+            SaveData();
         }
 
         public void IncrementCurrentHour()
@@ -155,21 +157,26 @@ namespace Statistics
         private void ClearButton_Click(object sender, EventArgs e)
         {
             ResetData();
-            UpdateChart();
             MessageBox.Show("当前班次数据已清零");
-            SaveData();
         }
 
         private void SaveData()
         {
             string filePath = GetDataFilePath();
-            var data = new
+            try
             {
-                HourData = hourData,
-                TotalCount = totalCount
-            };
-            string json = JsonConvert.SerializeObject(data);
-            File.WriteAllText(filePath, json);
+                var data = new
+                {
+                    HourData = hourData,
+                    TotalCount = totalCount
+                };
+                string json = JsonConvert.SerializeObject(data);
+                File.WriteAllText(filePath, json);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"保存数据时出错: {ex.Message}");
+            }
         }
 
         private void LoadData()
@@ -177,14 +184,39 @@ namespace Statistics
             string filePath = GetDataFilePath();
             if (File.Exists(filePath))
             {
-                string json = File.ReadAllText(filePath);
-                var data = JsonConvert.DeserializeObject<dynamic>(json);
-                hourData = new List<int>();
-                foreach (var item in data.HourData)
+                try
                 {
-                    hourData.Add((int)item);
+                    string json = File.ReadAllText(filePath);
+                    var data = JsonConvert.DeserializeObject<dynamic>(json);
+                    hourData = new List<int>();
+                    foreach (var item in data.HourData)
+                    {
+                        hourData.Add((int)item);
+                    }
+                    totalCount = (int)data.TotalCount;
                 }
-                totalCount = (int)data.TotalCount;
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"加载数据时出错: {ex.Message}");
+                }
+            }
+            else
+            {
+                // 如果文件不存在，初始化数据
+                hourData = new List<int>();
+                if (currentShift == ShiftType.DayShift)
+                {
+                    // 白班: 8点到20点
+                    for (int i = 0; i < 12; i++)
+                        hourData.Add(0);
+                }
+                else
+                {
+                    // 夜班: 20点到8点
+                    for (int i = 0; i < 12; i++)
+                        hourData.Add(0);
+                }
+                totalCount = 0;
             }
         }
 
