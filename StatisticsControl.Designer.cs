@@ -38,9 +38,7 @@
 
             // hourChart 设置
             this.hourChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hourChart.Location = new System.Drawing.Point(0, 70);
             this.hourChart.Name = "hourChart";
-            this.hourChart.Size = new System.Drawing.Size(600, 280);
             this.hourChart.TabIndex = 0;
 
             // totalLabel 设置
