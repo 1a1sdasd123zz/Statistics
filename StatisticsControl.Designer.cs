@@ -61,6 +61,8 @@
 
             // StatisticsControl 设置
             this.Controls.Add(this.hourChart);
+            // StatisticsControl 设置
+            this.Controls.Add(this.hourChart);
 
             // clearButton 设置
             this.clearButton.Dock = System.Windows.Forms.DockStyle.Top;
