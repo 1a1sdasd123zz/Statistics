@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using Newtonsoft.Json;
 
 namespace Statistics
 {
@@ -26,7 +28,6 @@ namespace Statistics
             ResetData();
             InitializeChart();
         }
-
 
         private void InitializeChart()
         {
@@ -58,22 +59,24 @@ namespace Statistics
 
         private void ResetData()
         {
-            hourData = new List<int>();
-
-            if (currentShift == ShiftType.DayShift)
+            LoadData();
+            if (hourData == null)
             {
-                // 白班: 8点到20点
-                for (int i = 0; i < 12; i++)
-                    hourData.Add(0);
+                hourData = new List<int>();
+                if (currentShift == ShiftType.DayShift)
+                {
+                    // 白班: 8点到20点
+                    for (int i = 0; i < 12; i++)
+                        hourData.Add(0);
+                }
+                else
+                {
+                    // 夜班: 20点到8点
+                    for (int i = 0; i < 12; i++)
+                        hourData.Add(0);
+                }
+                totalCount = 0;
             }
-            else
-            {
-                // 夜班: 20点到8点
-                for (int i = 0; i < 12; i++)
-                    hourData.Add(0);
-            }
-
-            totalCount = 0;
             UpdateTotalLabel();
         }
 
@@ -103,6 +106,7 @@ namespace Statistics
                 totalCount++;
                 UpdateTotalLabel();
                 UpdateChart();
+                SaveData();
             }
         }
 
@@ -151,6 +155,41 @@ namespace Statistics
             ResetData();
             UpdateChart();
             MessageBox.Show("当前班次数据已清零");
+            SaveData();
+        }
+
+        private void SaveData()
+        {
+            string filePath = GetDataFilePath();
+            var data = new
+            {
+                HourData = hourData,
+                TotalCount = totalCount
+            };
+            string json = JsonConvert.SerializeObject(data);
+            File.WriteAllText(filePath, json);
+        }
+
+        private void LoadData()
+        {
+            string filePath = GetDataFilePath();
+            if (File.Exists(filePath))
+            {
+                string json = File.ReadAllText(filePath);
+                var data = JsonConvert.DeserializeObject<dynamic>(json);
+                hourData = new List<int>();
+                foreach (var item in data.HourData)
+                {
+                    hourData.Add((int)item);
+                }
+                totalCount = (int)data.TotalCount;
+            }
+        }
+
+        private string GetDataFilePath()
+        {
+            string shiftName = currentShift == ShiftType.DayShift ? "DayShift" : "NightShift";
+            return Path.Combine(Application.StartupPath, $"{shiftName}_Data.json");
         }
     }
 }
