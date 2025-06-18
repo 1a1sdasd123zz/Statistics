@@ -16,7 +16,7 @@ namespace Statistics
 
         public enum ShiftType
         {
-            DayShift,  // 白班 (8:00-20:00)
+            DayShift, // 白班 (8:00-20:00)
             NightShift // 夜班 (20:00-8:00)
         }
 
@@ -44,7 +44,8 @@ namespace Statistics
             hourChart.Series.Add(series);
 
             // 设置标题
-            Title title = new Title("每小时数据统计", Docking.Top, new Font("Microsoft YaHei", 12F, FontStyle.Bold), Color.Black);
+            Title title = new Title("每小时数据统计", Docking.Top, new Font("Microsoft YaHei", 12F, FontStyle.Bold),
+                Color.Black);
             hourChart.Titles.Add(title);
         }
 
@@ -143,7 +144,7 @@ namespace Statistics
 
             // 设置 Y 轴标签格式为整数
             hourChart.ChartAreas[0].AxisY.LabelStyle.Format = "N0";
-            }
+        }
 
         private void ClearButton_Click(object sender, EventArgs e)
         {
