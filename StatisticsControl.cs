@@ -35,18 +35,20 @@ namespace Statistics
             ChartArea chartArea = new ChartArea("MainArea");
             chartArea.AxisX.Title = "小时";
             chartArea.AxisY.Title = "数量";
+
+            // 设置 X 轴标签间隔为 1
+            chartArea.AxisX.Interval = 1;
+
             hourChart.ChartAreas.Add(chartArea);
 
             // 设置系列
             Series series = new Series("数据");
             series.ChartType = SeriesChartType.Column;
             series.Color = Color.FromArgb(78, 154, 236);
-            series.IsValueShownAsLabel = true; // 显示数据标签
             hourChart.Series.Add(series);
 
             // 设置标题
-            Title title = new Title("每小时数据统计", Docking.Top, new Font("Microsoft YaHei", 12F, FontStyle.Bold),
-                Color.Black);
+            Title title = new Title("每小时数据统计", Docking.Top, new Font("Microsoft YaHei", 12F, FontStyle.Bold), Color.Black);
             hourChart.Titles.Add(title);
         }
 
