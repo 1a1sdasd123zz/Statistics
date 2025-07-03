@@ -68,13 +68,11 @@ namespace Statistics
             hourData = new List<int>();
             if (currentShift == ShiftType.DayShift)
             {
-                // 白班: 7点到19点
                 for (int i = 0; i < 12; i++)
                     hourData.Add(0);
             }
             else
             {
-                // 夜班: 19点到7点
                 for (int i = 0; i < 12; i++)
                     hourData.Add(0);
             }
